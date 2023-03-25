@@ -19,12 +19,12 @@ import numpy as np
 
 class Bandit():
     def __init__(self):
-        self.reward = np.zeros(10,dtype='float16')
-        # self.reward = np.asarray([1,2,3,4,5,6,7,8,9,10],dtype='float16')
+        self.reward = np.ones(10,dtype='float16')
+        #self.reward = np.asarray([1,2,3,4,5,6,7,8,9,10],dtype='float16')
 
     def randomReward(self):
         mu = 0
-        sigma = 0.01
+        sigma = 0.1
         return np.random.normal(mu,sigma,1)
 
 
@@ -52,8 +52,8 @@ def AverageApproximation(previous, actual, n):
 
 
 
-N = 10000
-Av = 1000
+N = 1000
+Av = 1
 
 
 bandit = Bandit()
@@ -64,6 +64,9 @@ action_counter = np.zeros(10)
 
 av_reward_per_step = []
 av_highest_bandit_reward_per_step = []
+
+sum_reward = 0
+plt.figure()
 
 for j in range(Av):
     step_reward = []
@@ -79,6 +82,11 @@ for j in range(Av):
         # get new reward based on policy
         bandit_reward = bandit.getReward(action)
 
+
+        sum_reward += bandit_reward
+        plt.scatter(j*N + i,sum_reward)
+
+
         # update expectation for the reward
         n = action_counter[action]
         reward_list_expected[action] = AverageApproximation(expected_reward, bandit_reward, n)
@@ -92,6 +100,10 @@ for j in range(Av):
     else:
         av_reward_per_step = 1/2 * (av_reward_per_step + np.asarray(step_reward))
         av_highest_bandit_reward_per_step = 1/2 * (av_highest_bandit_reward_per_step + np.asarray(bandit_max))
+
+
+plt.show()
+
 
 print(action_counter)
 plt.figure()
