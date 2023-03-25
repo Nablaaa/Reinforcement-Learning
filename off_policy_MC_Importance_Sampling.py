@@ -101,7 +101,7 @@ if __name__ == '__main__':
 
     gamma = 1 # discount factor
 
-    for n in np.linspace(3,6,50):
+    for n in np.linspace(3,5,50):
         n_episodes = int(10**n)
         print(n_episodes)
         n_list.append(n_episodes)
